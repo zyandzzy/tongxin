@@ -51,24 +51,30 @@ void infile(char * file,char * x)//将文件中内容读出;
 
     if(ch =='\n')
     i = 0;
-
     if(i == strlen(x))
-     { 
-      cout << "查询到的卡信息为：" << endl;
-      cout <<"卡号" << "\t\t"<<"密码" << "\t\t"<<"开卡时间" <<"\t"<<"\t"<<"上次使用时间"<<"\t";
-      cout<<"\t"<<"状态"<<"\t\t";
-      cout<<"总金额" << "\t\t"<<"余额" << endl;
-      cout<<x;
-      while(inFile.get(bh)&&bh!='\n')
-      {   
-        if(bh=='#')
-        cout<<"\t";
-        else
-          cout<<bh;
-      }
-      cout<<endl;
-      return;
+     {
+      inFile.get(ch);
+      if(ch=='#')
+       {  cout << "查询到的卡信息为：" << endl;
+          cout <<"卡号" << "\t\t"<<"密码" << "\t\t"<<"开卡时间" <<"\t"<<"\t\t"<<"上次使用时间"<<"\t";
+          cout<<"\t\t"<<"状态"<<"\t\t";
+          cout<<"总金额" << "\t\t"<<"余额" << endl;
+          cout<<x;
+          cout<<"\t";
+          while(inFile.get(bh)&&bh!='\n')
+          {   
+            if(bh=='#')
+            cout<<"\t";
+            else
+              cout<<bh;
+          }
+          cout<<endl;
+          return;
+       }
+       else
+       continue;
      }
   }
+  
   cout<<"未查询到这张卡"<<endl;
 }
