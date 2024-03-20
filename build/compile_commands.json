@@ -1,0 +1,26 @@
+[
+{
+  "directory": "D:/tongxin/build",
+  "command": "D:\\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\\mingw64\\bin\\g++.exe   -g   -Wall -o CMakeFiles\\tong.dir\\main.obj -c D:\\tongxin\\main.cpp",
+  "file": "D:/tongxin/main.cpp",
+  "output": "CMakeFiles/tong.dir/main.obj"
+},
+{
+  "directory": "D:/tongxin/build",
+  "command": "D:\\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\\mingw64\\bin\\g++.exe   -g   -Wall -o CMakeFiles\\tong.dir\\menu.obj -c D:\\tongxin\\menu.cpp",
+  "file": "D:/tongxin/menu.cpp",
+  "output": "CMakeFiles/tong.dir/menu.obj"
+},
+{
+  "directory": "D:/tongxin/build",
+  "command": "D:\\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\\mingw64\\bin\\g++.exe   -g   -Wall -o CMakeFiles\\tong.dir\\tool.obj -c D:\\tongxin\\tool.cpp",
+  "file": "D:/tongxin/tool.cpp",
+  "output": "CMakeFiles/tong.dir/tool.obj"
+},
+{
+  "directory": "D:/tongxin/build",
+  "command": "D:\\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\\mingw64\\bin\\g++.exe   -g   -Wall -o CMakeFiles\\tong.dir\\file.obj -c D:\\tongxin\\file.cpp",
+  "file": "D:/tongxin/file.cpp",
+  "output": "CMakeFiles/tong.dir/file.obj"
+}
+]

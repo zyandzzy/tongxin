@@ -1,0 +1,5 @@
+project(OUTPUT)
+
+add_executable(tong main.cpp menu.cpp struct.hpp tool.cpp file.cpp)
+
+add_definitions("-Wall")
