@@ -26,3 +26,12 @@ struct card
 
     int del;//删除标志（0-未删除，1-已删除）
 };
+
+
+
+struct CardNode
+{
+    card data;
+
+     struct CardNode* next;
+};

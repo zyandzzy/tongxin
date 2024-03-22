@@ -12,6 +12,7 @@ card cardN[99];//记录卡的信息
 int  con = 0;//记录现有卡的数目
 char tmt[20];//记录开卡时间（年月日）
 char tml[20];//记录上次使用时间
+CardNode* cardlist = nullptr;
 
 
 
@@ -36,7 +37,9 @@ void chaxun()
     cout<<"请输入要查询的卡号："<<endl;
     char x[99];
     cin>>x;
-    infile("card.txt",x);
+    int n = 0;
+    int &y =n;
+    infile("card.txt",x,y);
     /*int x;   
     char arr[29];//记录卡号，与已有卡号对比
     cout<<"请输入要查询的卡号：";
@@ -111,12 +114,37 @@ void add()
         cardN[con].tend = time(NULL);
         cardN[con].tlast =time(NULL);
         timetrs(cardN[con].tstart,tmt);
-        putfile("card.txt",&cardN[con]);
-        cout << "-----添加的卡信息如下-----" << endl;
-        printf("\t卡号\t密码\t状态\t余额\t");
-        cout << endl;
-        cout << "\t" << cardN[con].card << "\t" << cardN[con].password << "\t" << cardN[con].status << "\t" << cardN[con].balance << endl;
-        con+=1;
+
+        
+        if(putfile("card.txt",&cardN[con])==0)
+        {   
+            cout<<"该卡号已存在"<<endl;
+            return;
+        }
+        else (putfile("card.txt",&cardN[con])==1);
+        {
+            cout << "-----添加的卡信息如下-----" << endl;
+            printf("\t卡号\t密码\t状态\t余额\t");
+            cout << endl;
+            cout << "\t" << cardN[con].card << "\t" << cardN[con].password << "\t" << cardN[con].status << "\t" << cardN[con].balance << endl;
+            con+=1;
+        }
+    } 
+}
+
+
+int initCardlist ()
+{
+    CardNode* head = nullptr;
+
+    if(cardlist = nullptr)
+    {
+        head = new CardNode;
+
+        if(head != nullptr)
+        {
+            head->next = nullptr;
+            cardlist = head;
+        }
     }
-  
 }
