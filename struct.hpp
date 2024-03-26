@@ -25,6 +25,12 @@ struct card
     float balance;//记录余额
 
     int del;//删除标志（0-未删除，1-已删除）
+
+    char start[66];
+
+    char last[66];
+
+    char end[66];
 };
 
 

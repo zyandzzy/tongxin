@@ -3,6 +3,7 @@
 #include"tool.hpp"
 #include"file.hpp"
 #include<iostream>
+#include<fstream>
 #include<cstring>
 #include<ctime>
 
@@ -12,8 +13,7 @@ card cardN[99];//记录卡的信息
 int  con = 0;//记录现有卡的数目
 char tmt[20];//记录开卡时间（年月日）
 char tml[20];//记录上次使用时间
-CardNode* cardlist = nullptr;
-
+CardNode* cardlist = nullptr;//cardlist作为链表的头
 
 
 
@@ -133,7 +133,9 @@ void add()
 }
 
 
-int initCardlist ()
+//初始化卡信息链表
+//true代表成功，false代表失败
+int initCardlist()
 {
     CardNode* head = nullptr;
 
@@ -145,6 +147,88 @@ int initCardlist ()
         {
             head->next = nullptr;
             cardlist = head;
+            return true;
         }
     }
+
+    return false;
 }
+
+//释放卡信息列表
+void releaseCardlist()
+{
+    CardNode* cur = cardlist;
+    CardNode* next = nullptr;
+
+    while(cur!=nullptr)
+    {
+        next = cur->next;
+        delete cur;
+    }
+}
+
+
+int getcard()
+{
+    int i = 0;
+    
+    char c[100];
+
+    card* pcard = nullptr;//读取到的一条卡信息
+    
+    int ncount = 0;//读取到的卡信息个数
+
+   CardNode* node = nullptr;//当前尾节点指针
+
+   CardNode* cur = nullptr;
+
+   if(cardlist!=nullptr)
+   {
+      releaseCardlist();//释放链表
+   }
+
+   initCardlist();//初始化链表
+
+   ifstream inF;//打开文件的前置工作
+
+   inF.open("card.txt",ios_base::in);//以只读形式打开文件
+
+   while(inF.getline(c,100,'\n'))
+   {
+      if(c[0]=='\0') 
+      return false;
+      
+      ncount++;
+   }
+
+   pcard = new card [ncount];//给予内存空间
+
+   filetoli(pcard);
+
+   if(pcard!=nullptr)
+   {
+     for( i=0,node = cardlist;i<ncount;i++)
+     {
+        cur = new CardNode;
+
+        if(cur == nullptr)
+        {   
+            delete cur;
+            return false;
+        }
+        memset(cur,0,sizeof(CardNode));
+
+       cur->data = pcard[i];
+
+       cur->next = nullptr;
+
+       node = cur;
+     }
+      delete [] pcard;
+      return true;
+   }
+
+   return false;
+
+}
+
