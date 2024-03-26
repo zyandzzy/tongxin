@@ -4,7 +4,19 @@
         "ostream": "cpp",
         "ctime": "cpp",
         "fstream": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp",
+        "unordered_map": "cpp",
+        "memory": "cpp",
+        "initializer_list": "cpp",
+        "tuple": "cpp"
     },
     "cmake.configureOnOpen": true
 }

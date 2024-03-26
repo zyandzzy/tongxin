@@ -9,11 +9,15 @@
 
 using namespace std;
 
+int j = 0;//记录
 card cardN[99];//记录卡的信息
 int  con = 0;//记录现有卡的数目
 char tmt[20];//记录开卡时间（年月日）
 char tml[20];//记录上次使用时间
-CardNode* cardlist = nullptr;//cardlist作为链表的头
+card ca = {};
+CardNode* cardlist = new CardNode(ca);//cardlist作为链表的头
+
+
 
 
 
@@ -104,7 +108,7 @@ void add()
     }
     else
     {   
-        strcpy(cardN[con].password,cb.c_str()) ;
+        strcpy(cardN[con].password,cb.c_str());
         strcpy(cardN[con].card , ca.c_str());
         cardN[con].totle_use = cardN[0].balance;
         cardN[con].usecount = 0;
@@ -139,11 +143,11 @@ int initCardlist()
 {
     CardNode* head = nullptr;
 
-    if(cardlist = nullptr)
+    if(cardlist->next == nullptr)
     {
-        head = new CardNode;
+        head = new CardNode(ca);
 
-        if(head != nullptr)
+        if(head->next == nullptr)
         {
             head->next = nullptr;
             cardlist = head;
@@ -160,17 +164,21 @@ void releaseCardlist()
     CardNode* cur = cardlist;
     CardNode* next = nullptr;
 
-    while(cur!=nullptr)
+    while(cur->next!=nullptr)
     {
         next = cur->next;
         delete cur;
+        cur = next;
     }
+    cardlist = new CardNode(ca);
 }
 
 
-int getcard()
+int getcard()//获取卡信息，并储存在链表中
 {
     int i = 0;
+
+    int& m = j;
     
     char c[100];
 
@@ -178,16 +186,17 @@ int getcard()
     
     int ncount = 0;//读取到的卡信息个数
 
-   CardNode* node = nullptr;//当前尾节点指针
+   CardNode* node = new CardNode(ca);//当前尾节点指针
 
-   CardNode* cur = nullptr;
+   CardNode* cur ;//= new CardNode(ca);
 
    if(cardlist!=nullptr)
    {
       releaseCardlist();//释放链表
    }
 
-   initCardlist();//初始化链表
+   if(initCardlist()==0)
+   cout<<"链表初始化失败，请重新尝试"<<endl;
 
    ifstream inF;//打开文件的前置工作
 
@@ -203,24 +212,26 @@ int getcard()
 
    pcard = new card [ncount];//给予内存空间
 
-   filetoli(pcard);
+   filetoli(pcard,m);//把文件中信息存到结构体中
 
    if(pcard!=nullptr)
    {
-     for( i=0,node = cardlist;i<ncount;i++)
+     for( i=0,node = cardlist;i<ncount;i++)//node为头指针，他的初始值是cardlist，所以cardlist也是头指针，并且cardlist的值并未被改变
      {
-        cur = new CardNode;
+        cur = new CardNode(ca);
 
         if(cur == nullptr)
         {   
             delete cur;
             return false;
         }
-        memset(cur,0,sizeof(CardNode));
+       // memset(cur,0,sizeof(CardNode));
 
-       cur->data = pcard[i];
+       cur->date = pcard[i];
 
        cur->next = nullptr;
+
+       node->next = cur;
 
        node = cur;
      }
@@ -232,3 +243,30 @@ int getcard()
 
 }
 
+void querycard()
+{   
+    char x[30];
+    cout<<"请输入卡号:"<<endl;
+    cin>>x;
+    for(CardNode* i = cardlist;i!=nullptr;i = i->next)
+    {
+       if(strcmp(x,i->date.card)==0)
+      {
+       cout << "查询到的卡信息为：" << endl;
+       cout <<"卡号" << "\t"<<"密码" << "\t"<<"开卡时间" <<"\t"<<"\t"<<"上次使用时间"<<"\t";
+       cout<<"\t"<<"状态"<<"\t";
+       cout<<"总金额" << "\t"<<"余额" <<"\t"<< endl;
+
+       cout<<i->date.card<<"\t";
+       cout<<i->date.password<<"\t";
+       cout<<i->date.start<<"\t";
+       if(strcmp(i->date.start,i->date.last)==0) cout<<"您未使用过这张卡"<<"\t";
+       else  cout<<i->date.last<<"\t";
+       cout<<i->date.status<<"\t";
+       cout<<i->date.totle_use<<"\t";
+       cout<<i->date.balance<<"\t"<<endl;
+       break;
+
+      }
+    }
+}

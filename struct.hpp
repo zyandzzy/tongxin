@@ -37,7 +37,9 @@ struct card
 
 struct CardNode
 {
-    card data;
+    card date;
 
-     struct CardNode* next;
+    CardNode* next;
+
+    CardNode(card _date) : date(_date), next(nullptr) {}
 };

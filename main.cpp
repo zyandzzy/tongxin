@@ -16,11 +16,14 @@ int main()
 		if(num1 == 1)
 		{
 			add();
+			getcard();
 		}
 
 		else if (num1 == 2)
-		{
-			chaxun();
+		{   
+			getcard();
+			//chaxun();
+			querycard();
 		}
 
 		else if (num1 == 3) cout << "上机成功"<<endl;

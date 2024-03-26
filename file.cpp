@@ -7,6 +7,8 @@
 using namespace std;
 //y=0表示该卡号已存在
 
+
+
 //将内容写入到文件当中
 int putfile(char * file ,card* cardfile)
 {
@@ -27,8 +29,7 @@ int putfile(char * file ,card* cardfile)
        {  
         
          if(strcmp(str,cardfile->card)==0)
-        {
-          
+        {         
             return 0;
         }
         inf.getline(strr,100);
@@ -171,38 +172,45 @@ void infile(char * file,char * x,int& y)//y==0代表查询,y==1代表写入
 }
 
 
-void filetoli(card* p)
+void filetoli(card* p,int &j)
 {
    ifstream infi;
-   
-   int i =0,j=0;
+   j = 0;//每次转换的时候都要把j变为0，重新给结构体赋值
+   int i =0,k=0;//i来储存当前读到文件的第几位，k表示储存到结构体内容的第几位
    char strf[100];
    infi.open("card.txt",ios_base::in);
 
-   while(infi.getline(strf,100,'\n'))
-  {
-    for(i=0;strf[i]!='#';i++)
+   while(infi.getline(strf,100))//每次读取一行
+  { 
+    i = 0;
+    for(k = 0;strf[i]!='#';i++,k++)//每次进入循环，把k赋值为0，确保从头赋值
     {           
-      p[j].card[i] = strf[i];
+      p[j].card[k] = strf[i];
     }
+    p[j].card[k] = '\0';
     i+=2;
     
-    for(;strf[i]!='#';i++)
+    for(k=0;strf[i]!='#';i++,k++)
     {           
-      p[j].password[i] = strf[i];
+      p[j].password[k] = strf[i];
     }
+    p[j].password[k] = '\0';
     i+=2;
 
-    for(;strf[i]!='#';i++)
+    for(k=0;strf[i]!='#';i++,k++)
     {           
-      p[j].start[i] = strf[i];
+      p[j].start[k] = strf[i];
     }
+
+    p[j].start[k] = '\0';
     i+=2;
 
-    for(;strf[i]!='#';i++)
+    for(k=0;strf[i]!='#';i++,k++)
     {           
-      p[j].last[i] = strf[i];
+      p[j].last[k] = strf[i];
     }
+
+    p[j].last[k] = '\0';
     i+=2;
 
     for(;strf[i]!='#';i++)
@@ -216,7 +224,7 @@ void filetoli(card* p)
     for(;strf[i]!='#';i++)
     {           
       p[j].totle_use *= 10;
-      p[j].totle_use+=strf[i];
+      p[j].totle_use+=strf[i]-'0';
     }
     i+=2;
 
@@ -225,7 +233,7 @@ void filetoli(card* p)
     for(;strf[i]!='#';i++)
     {           
       p[j].balance *= 10;
-      p[j].balance+=strf[i];
+      p[j].balance+=strf[i]-'0';
     }
     i+=2;
     j++;
