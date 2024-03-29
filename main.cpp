@@ -26,8 +26,14 @@ int main()
 			querycard();
 		}
 
-		else if (num1 == 3) cout << "上机成功"<<endl;
-		else if (num1 == 4) cout << "下机成功" << endl;
+		else if (num1 == 3) 
+		{
+			shangji();
+		}
+		else if (num1 == 4)
+		{
+			xiaji();
+		}
 		else if (num1 == 5) cout << "请输入你要充值的金额" << endl;
 		else if (num1 == 6) cout << "退费成功" << endl;
 		else if (num1 == 7) cout << "查询成功" << endl;

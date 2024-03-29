@@ -10,7 +10,7 @@ struct card
 
     char password[99];//密码
 
-    int status;//储存卡的状态
+    int status;//储存卡的状态,1上机，0未上机
 
     time_t tstart;//记录开卡时间
 
@@ -40,6 +40,30 @@ struct CardNode
     card date;
 
     CardNode* next;
-
+    
     CardNode(card _date) : date(_date), next(nullptr) {}
+};
+
+struct updw
+{
+    char tstart[40];//开始时间
+
+    char card[20];//卡号
+
+    char last[40];//上次使用时间
+
+    int del;//删除标识
+
+    int status;//状态
+
+    float amount;//消费金额
+};
+
+struct upnode
+{
+    updw date;
+
+    upnode* next;
+
+    upnode(updw _date) : date(_date),next(nullptr){}
 };

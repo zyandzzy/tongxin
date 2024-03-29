@@ -12,3 +12,7 @@ void releaseCardlist();
 int initCardlist();
 
 int getcard();//获取卡信息
+
+void shangji();
+
+void xiaji();

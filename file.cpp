@@ -219,8 +219,7 @@ void filetoli(card* p,int &j)
     }
     i+=2;
 
-    p[j].totle_use += (strf[i]-'0');
-    i++;
+    p[j].totle_use = 0;//先初始化为0
     for(;strf[i]!='#';i++)
     {           
       p[j].totle_use *= 10;
@@ -228,7 +227,7 @@ void filetoli(card* p,int &j)
     }
     i+=2;
 
-     p[j].balance += (strf[i]-'0');
+     p[j].balance =strf[i]-'0';
     i++;
     for(;strf[i]!='#';i++)
     {           
@@ -236,6 +235,149 @@ void filetoli(card* p,int &j)
       p[j].balance+=strf[i]-'0';
     }
     i+=2;
+    j++;
+  }
+}
+
+int kmp(char* p,char* q)//p是子串，q是模板串
+{ 
+  
+  int n = strlen(p)-1,m = strlen(q);
+
+  for(int i = m;i>=1;i--)
+  q[i] = q[i-1];
+
+  int ne[20];
+
+  memset(ne,0,20);
+  for(int i = 2,j = 0;i<=n;i++)
+  {
+     while(j&&p[i]!=p[j+1]) j = ne[j];
+
+     if(p[i]==p[j+1]) j++;
+
+     ne[i] = j;
+  }
+
+  for(int i = 1,j = 0;i<=m;i++)
+  {
+    while(j&&q[i]!=p[j+1]) j=ne[j];
+
+    if(q[i]==p[j+1]) j++;
+
+    if(j==n)
+    {  
+       for(int i = 0;i<m;i++)
+       q[i] = q[i+1];
+       q[m] = '\0';
+       return 1;
+    }
+  }
+  return 0;
+}
+
+void putup()//将内容写入到updown文件中
+{
+  ofstream pup;
+
+  pup.open("updown.txt",ios_base::out|ios_base::app);
+
+
+
+}
+
+int update(CardNode* cardfile)//重新写入文件
+{
+  ofstream pp;
+  pp.open("card.txt",ios_base::out);
+  if(!pp.is_open())//如果未打开成功
+  {
+    cout<<"can't open"<<"card.txt"<<endl;
+    return 0;
+  }
+  cardfile = cardfile->next;
+  for(CardNode* i = cardfile;i!=NULL;i = i->next)
+  {     
+        pp<<i->date.card<<"##";
+
+        pp<<i->date.password<<"##";
+
+        pp<<i->date.start<<"##";
+
+        pp<<i->date.last<<"##";
+
+        pp<<i->date.status<<"##";
+
+        pp<<i->date.totle_use<<"##";
+
+        pp<<i->date.balance<<"##";
+        pp<<"\n";
+  }
+  return 1;
+
+}
+
+void fileupdate(CardNode* ud)
+{
+  ofstream fp;
+
+  fp.open("updown.txt",ios_base::out);
+
+  if(!fp.is_open())
+  {
+    cout<<"---写入文件updown.txt失败---"<<endl;
+  }
+  ud = ud->next;
+  for(;ud!=nullptr;ud = ud->next)
+  {
+    fp<<ud->date.card<<"##";
+
+    fp<<ud->date.status<<"##";
+
+    fp<<ud->date.start<<"##";
+
+    fp<<ud->date.last<<"##"<<"\n";
+  }
+}
+
+
+void filetoud(updw* p,int j)
+{
+   ifstream infi;
+   j = 0;//每次转换的时候都要把j变为0，重新给结构体赋值
+   int i =0,k=0;//i来储存当前读到文件的第几位，k表示储存到结构体内容的第几位
+   char strf[100];
+   infi.open("card.txt",ios_base::in);
+
+   while(infi.getline(strf,100))//每次读取一行
+  { 
+    i = 0;
+    for(k = 0;strf[i]!='#';i++,k++)//每次进入循环，把k赋值为0，确保从头赋值
+    {           
+      p[j].card[k] = strf[i];
+    }
+    p[j].card[k] = '\0';
+    i+=2;
+
+    for(k = 0;strf[i]!='#';i++,k++)
+    p[j].status = strf[i];
+    i+=2;
+    
+
+     for(k=0;strf[i]!='#';i++,k++)
+    {           
+      p[j].tstart[k] = strf[i];
+    }
+    p[j].tstart[k] = '\0';
+    i+=2;
+
+    for(k=0;strf[i]!='#';i++,k++)
+    {           
+      p[j].last[k] = strf[i];
+    }
+    p[j].last[k] = '\0';
+    i+=2;
+
     j++;
   }
 }
