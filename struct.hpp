@@ -18,6 +18,8 @@ struct card
 
     time_t tlast;//记录最后使用的时间
 
+    float xiao;
+
     float totle_use; //记录总金额
 
     int usecount = 0;//记录使用次数
@@ -26,16 +28,16 @@ struct card
 
     int del;//删除标志（0-未删除，1-已删除）
 
-    char start[66];
+    char start[66];//开卡时间
 
-    char last[66];
+    char last[66];//上次使用时间
 
-    char end[66];
+    char end[66];//结束使用的时间
 };
 
 
 
-struct CardNode
+struct CardNode//链表
 {
     card date;
 
@@ -44,26 +46,24 @@ struct CardNode
     CardNode(card _date) : date(_date), next(nullptr) {}
 };
 
-struct updw
+struct cz//充值退费信息
 {
-    char tstart[40];//开始时间
-
     char card[20];//卡号
 
-    char last[40];//上次使用时间
+    char tt[40];//充值时间
 
-    int del;//删除标识
+   float balance;//充值金额
 
-    int status;//状态
+    float bal;//退费金额
 
-    float amount;//消费金额
+    float totle;//总金额
+
+    time_t ti;
+
+    cz() : card(),tt(),balance(),bal(),ti() {}
 };
 
-struct upnode
+struct jy//储存用户的建议
 {
-    updw date;
-
-    upnode* next;
-
-    upnode(updw _date) : date(_date),next(nullptr){}
+  char xx[200];
 };

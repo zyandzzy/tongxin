@@ -5,12 +5,8 @@
 #include<iostream>
 
 using namespace std;
-//y=0表示该卡号已存在
 
-
-
-//将内容写入到文件当中
-int putfile(char * file ,card* cardfile)
+int putfile(char * file ,card* cardfile)//将结构体信息以文本形式写入文件
 {
   ofstream putFile;
   ifstream inf;
@@ -45,10 +41,13 @@ int putfile(char * file ,card* cardfile)
         putFile<<tmt<<"##";
 
         putFile<<cardfile->status<<"##";
-
+        
+        putFile<<cardfile->del<<"##";
         putFile<<cardfile->totle_use<<"##";
 
         putFile<<cardfile->balance<<"##";
+
+        putFile<<cardfile->usecount<<"##";
         putFile<<"\n";
         return 1;
        
@@ -77,7 +76,9 @@ int putfile(char * file ,card* cardfile)
         putFile<<"\n";
         return 1;
        }*/
+
   }
+ 
 }
 
 //将文件中内容读出;
@@ -152,7 +153,7 @@ void infile(char * file,char * x,int& y)//y==0代表查询,y==1代表写入
           cout << "查询到的卡信息为：" << endl;
           cout <<"卡号" << "\t\t"<<"密码" << "\t\t"<<"开卡时间" <<"\t"<<"\t\t"<<"上次使用时间"<<"\t";
           cout<<"\t\t"<<"状态"<<"\t\t";
-          cout<<"总金额" << "\t\t"<<"余额" << endl;
+          cout<<"总金额" << "\t\t"<<"余额" <<"\t"<<"使用次数" <<endl;
           cout<<x;
           cout<<"\t";
           while(inFile.get(bh)&&bh!='\n')
@@ -171,8 +172,7 @@ void infile(char * file,char * x,int& y)//y==0代表查询,y==1代表写入
   cout<<"未查询到这张卡"<<endl;
 }
 
-
-void filetoli(card* p,int &j)
+void filetoli(card* p,int &j)//将二进制文件读入链表中
 {
    ifstream infi;
    j = 0;//每次转换的时候都要把j变为0，重新给结构体赋值
@@ -183,7 +183,7 @@ void filetoli(card* p,int &j)
    while(infi.getline(strf,100))//每次读取一行
   { 
     i = 0;
-    for(k = 0;strf[i]!='#';i++,k++)//每次进入循环，把k赋值为0，确保从头赋值
+    for(k = 0;strf[i]!='#';i++,k++)//每进入循环，把k赋值为0，确保从头赋值
     {           
       p[j].card[k] = strf[i];
     }
@@ -219,27 +219,73 @@ void filetoli(card* p,int &j)
     }
     i+=2;
 
-    p[j].totle_use = 0;//先初始化为0
     for(;strf[i]!='#';i++)
     {           
+      p[j].del = strf[i]-'0';
+    }
+    i+=2;
+
+    p[j].totle_use = strf[i]-'0';
+    i++;//先初始化为0
+    int fu=0;
+    for(;strf[i]!='#';i++)
+    { 
+      if(strf[i]!='.'&&strf[i]!='-')          
+      {
       p[j].totle_use *= 10;
       p[j].totle_use+=strf[i]-'0';
     }
-    i+=2;
-
-     p[j].balance =strf[i]-'0';
-    i++;
-    for(;strf[i]!='#';i++)
-    {           
-      p[j].balance *= 10;
-      p[j].balance+=strf[i]-'0';
+      else if (strf[i]=='.')
+      {
+        i++;
+        p[j].totle_use+=(float)(strf[i]-'0')/10;
+      }
+      else if(strf[i]=='-')
+       fu=1;
     }
     i+=2;
+    if(fu==1)
+    p[j].totle_use*=-1;
+     
+    fu = 0;
+    if(strf[i]=='-')
+    {
+      fu=1;
+      i++;
+    }
+     p[j].balance =strf[i]-'0';
+   
+    i++;
+   
+    for(;strf[i]!='#';i++)
+    { 
+      if(strf[i]!='.'&&strf[i]!='-')          
+      {
+        p[j].balance *= 10;
+        p[j].balance+=strf[i]-'0';
+      }
+      else if (strf[i]=='.')
+      {
+        i++;
+        p[j].balance+=(float)(strf[i]-'0')/10;
+      }
+    }
+    i+=2;
+    if(fu==1)
+    p[j].balance*=-1;
+
+    p[j].usecount =strf[i]-'0';
     j++;
   }
+   /*ifstream infi("card.dat",ios_base::in|ios_base::binary);
+   int i=0;
+   while(infi.read((char*)&p[i],sizeof(&p)))
+   {
+    i++;
+   }*/
 }
 
-int kmp(char* p,char* q)//p是子串，q是模板串
+int kmp(char* p,char* q)//p是子串，q是模板串，用来模糊查询
 { 
   
   int n = strlen(p)-1,m = strlen(q);
@@ -276,17 +322,7 @@ int kmp(char* p,char* q)//p是子串，q是模板串
   return 0;
 }
 
-void putup()//将内容写入到updown文件中
-{
-  ofstream pup;
-
-  pup.open("updown.txt",ios_base::out|ios_base::app);
-
-
-
-}
-
-int update(CardNode* cardfile)//重新写入文件
+int update(CardNode* cardfile)//重新写入card文件
 {
   ofstream pp;
   pp.open("card.txt",ios_base::out);
@@ -307,77 +343,29 @@ int update(CardNode* cardfile)//重新写入文件
         pp<<i->date.last<<"##";
 
         pp<<i->date.status<<"##";
+         
+         pp<<i->date.del<<"##";
 
         pp<<i->date.totle_use<<"##";
 
         pp<<i->date.balance<<"##";
+
+        pp<<i->date.usecount<<"##";
         pp<<"\n";
   }
   return 1;
-
 }
 
-void fileupdate(CardNode* ud)
+void fileupdate(CardNode* ud)//以二进制形式更新updown
 {
   ofstream fp;
 
-  fp.open("updown.txt",ios_base::out);
+  fp.open("updown.dat",ios_base::binary|ios_base::out|ios::app);
 
   if(!fp.is_open())
   {
-    cout<<"---写入文件updown.txt失败---"<<endl;
+    cout<<"---写入文件updown.dat失败---"<<endl;
+    return;
   }
-  ud = ud->next;
-  for(;ud!=nullptr;ud = ud->next)
-  {
-    fp<<ud->date.card<<"##";
-
-    fp<<ud->date.status<<"##";
-
-    fp<<ud->date.start<<"##";
-
-    fp<<ud->date.last<<"##"<<"\n";
-  }
-}
-
-
-void filetoud(updw* p,int j)
-{
-   ifstream infi;
-   j = 0;//每次转换的时候都要把j变为0，重新给结构体赋值
-   int i =0,k=0;//i来储存当前读到文件的第几位，k表示储存到结构体内容的第几位
-   char strf[100];
-   infi.open("card.txt",ios_base::in);
-
-   while(infi.getline(strf,100))//每次读取一行
-  { 
-    i = 0;
-    for(k = 0;strf[i]!='#';i++,k++)//每次进入循环，把k赋值为0，确保从头赋值
-    {           
-      p[j].card[k] = strf[i];
-    }
-    p[j].card[k] = '\0';
-    i+=2;
-
-    for(k = 0;strf[i]!='#';i++,k++)
-    p[j].status = strf[i];
-    i+=2;
-    
-
-     for(k=0;strf[i]!='#';i++,k++)
-    {           
-      p[j].tstart[k] = strf[i];
-    }
-    p[j].tstart[k] = '\0';
-    i+=2;
-
-    for(k=0;strf[i]!='#';i++,k++)
-    {           
-      p[j].last[k] = strf[i];
-    }
-    p[j].last[k] = '\0';
-    i+=2;
-
-    j++;
-  }
+  fp.write((const char*)ud,sizeof (*ud));
 }
